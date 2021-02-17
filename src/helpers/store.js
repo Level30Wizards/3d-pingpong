@@ -1,4 +1,6 @@
 import create from 'zustand'
+import io from 'socket.io-client'
+const socketIo = io('/')
 
 const useStore = create((set) => {
   return {
@@ -9,5 +11,40 @@ const useStore = create((set) => {
     },
   }
 })
+
+export const initSocket = () => {
+  // const { pathname } = window.location
+  const { getState } = useSocketData
+
+  socketIo.on('SWITCH_ROOMS', ({ room }) => {
+    getState().setRoom(room)
+  })
+
+  socketIo.on('SEND_EULER_ANGLES', (allRooms) => {
+    getState().setEulerAngels(allRooms)
+  })
+  socketIo.on('SEND_ACCELERATION', (allRooms) => {
+    getState().setAcceleration(allRooms)
+  })
+  socketIo.on('disconnect', () => {
+    getState().setRoom(null)
+  })
+}
+
+export const useSocketData = create((set) => ({
+  socket: socketIo,
+  currentRoom: null,
+  setRoom: (id) => {
+    set({ currentRoom: id })
+  },
+  eulerAngles: null,
+  setEulerAngels: (eulerAngles) => {
+    set({ eulerAngles })
+  },
+  acceleration: null,
+  setAcceleration: (acceleration) => {
+    set({ acceleration })
+  },
+}))
 
 export default useStore
