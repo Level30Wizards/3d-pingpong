@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Environment, MeshDistortMaterial, Sphere } from '@react-three/drei'
 import { a, useSpring } from '@react-spring/three'
-import useStore from '@/helpers/store'
+import useStore, { useSocketData } from '@/helpers/store'
 
 const M = a(MeshDistortMaterial)
 
@@ -10,11 +10,15 @@ const SphereComponent = () => {
   const { color } = useSpring({
     color: router.route === '/box' ? '#272727' : 'black',
   })
+
+  const eulerAngles = useSocketData((s) => s.eulerAngles)
+  console.log(eulerAngles)
   return (
     <Suspense fallback={null}>
       <ambientLight intensity={0.5} />
       <Sphere
         args={[1, 32, 32]}
+        position={[x, y, z]}
         onClick={() => {
           router.push(`/box`)
         }}
