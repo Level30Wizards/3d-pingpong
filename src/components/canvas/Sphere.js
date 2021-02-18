@@ -12,7 +12,8 @@ const SphereComponent = () => {
   })
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
-  console.log(eulerAngles)
+  const { x, y, z } = eulerAngles
+
   return (
     <Suspense fallback={null}>
       <ambientLight intensity={0.5} />

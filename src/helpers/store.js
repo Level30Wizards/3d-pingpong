@@ -21,7 +21,7 @@ export const initSocket = () => {
   })
 
   socketIo.on('SEND_EULER_ANGLES', (allRooms) => {
-    getState().setEulerAngels(allRooms)
+    getState().setEulerAngles(allRooms)
   })
   socketIo.on('SEND_ACCELERATION', (allRooms) => {
     getState().setAcceleration(allRooms)
@@ -38,7 +38,7 @@ export const useSocketData = create((set) => ({
     set({ currentRoom: id })
   },
   eulerAngles: null,
-  setEulerAngels: (eulerAngles) => {
+  setEulerAngles: (eulerAngles) => {
     set({ eulerAngles })
   },
   acceleration: null,

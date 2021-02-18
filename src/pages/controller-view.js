@@ -13,24 +13,28 @@ const Sphere = dynamic(() => import('@/components/canvas/Sphere'), {
 // to be used by the main display.
 
 const Page = () => {
-  // useStore.setState({ title: 'Sphere' })
+  useStore.setState({ title: 'Controller' })
   const [acc, setAcc] = useState(null)
   const [eul, setEul] = useState(null)
 
   const currentRoom = useSocketData((s) => s.currentRoom)
-  const setRoom = useSocketData((s) => s.setRoom)
+  const { setRoom } = useSocketData()
+  const setEulerAngles = useSocketData((s) => s.setEulerAngles)
+  const setAcceleration = useSocketData((s) => s.setAcceleration)
   const socket = useSocketData((s) => s.socket)
   const roomNumber = useRef(null)
 
   const [clicked, setClicked] = useState(false)
 
   function handleOrientation(e) {
+    console.log(e)
     // obtains x y z angles
     const eulerAngles = {
       x: Math.round(e.beta),
       y: Math.round(e.gamma),
       z: Math.round(e.alpha),
     }
+    setEulerAngles(eulerAngles)
     setEul(eulerAngles)
     // send euler angles for main display (MainDisplayView)
     socket.emit('SEND_EULER_ANGLES', {
@@ -39,11 +43,13 @@ const Page = () => {
     })
   }
   function handleMotion(e) {
+    console.log(e)
     const acceleration = {
       x: Math.round(e.acceleration.x),
       y: Math.round(e.acceleration.y),
       z: Math.round(e.acceleration.z),
     }
+    setAcceleration(acceleration)
     setAcc(acceleration)
     // send rate of acceleration for main display (MainDisplayView)
     socket.emit('SEND_ACCELERATION', {
@@ -80,7 +86,9 @@ const Page = () => {
   }
 
   return (
-    <main>
+    <>
+      <Sphere r3f />
+
       <h2>Pair controller</h2>
       <input
         style={{
@@ -115,7 +123,7 @@ const Page = () => {
         <p>{JSON.stringify(acc)}</p>
         <p>{JSON.stringify(eul)}</p>
       </div>
-    </main>
+    </>
   )
 }
 

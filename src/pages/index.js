@@ -10,7 +10,7 @@ const Sphere = dynamic(() => import('@/components/canvas/Sphere'), {
 
 const Page = () => {
   useStore.setState({ title: 'Sphere' })
-  const router = useRouter()
+  const router = useStore((s) => s.router)
 
   useEffect(() => {
     const w = window,
@@ -35,6 +35,16 @@ const Page = () => {
 
   const data = useSocketData()
   console.log(data)
+
+  // const threshold = 12;
+  // if (
+  //   Math.abs(this.acceleration.x) > threshold ||
+  //   Math.abs(this.acceleration.y) > threshold ||
+  //   Math.abs(this.acceleration.z) > threshold
+  // ) {
+  //   return true;
+  // }
+  // return false;
 
   return (
     <>
