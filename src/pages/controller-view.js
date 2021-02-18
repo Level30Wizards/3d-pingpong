@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import useStore, { useSocketData } from '@/helpers/store'
 import dynamic from 'next/dynamic'
-import Go from '@/components/dom/go'
 
 const Sphere = dynamic(() => import('@/components/canvas/Sphere'), {
   ssr: false,

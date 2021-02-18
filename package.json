@@ -1,12 +1,10 @@
 {
   "name": "r3f-next-starter",
   "version": "1.6.0",
-  "authors": [
-    "Renaud ROHLINGER <https://twitter.com/onirenaud>"
-  ],
+  "authors": ["Renaud ROHLINGER <https://twitter.com/onirenaud>"],
   "private": false,
   "scripts": {
-    "start": "NODE_ENV=production node server/dev.js",
+    "start": "node server/dev.js",
     "lint": "yarn prettier && yarn eslint",
     "eslint": "eslint --fix 'src/**/*.{js,jsx}' --ext jsconfig.json",
     "prettier": "prettier --list-different '**/*.{js,jsx,md}'",
@@ -21,12 +19,8 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,json,md}": [
-      "prettier --write"
-    ],
-    "*.{js,jsx}": [
-      "eslint --fix"
-    ]
+    "*.{js,jsx,json,md}": ["prettier --write"],
+    "*.{js,jsx}": ["eslint --fix"]
   },
   "dependencies": {
     "@pmndrs/branding": "^0.0.4",

@@ -37,11 +37,15 @@ export const useSocketData = create((set) => ({
   setRoom: (id) => {
     set({ currentRoom: id })
   },
-  eulerAngles: null,
+  eulerAngles: { x: null, y: null, z: null },
+  // x: null, // -180 to 180
+  // y: null, // -90 to 90
+  // z: null // 0 to 360
   setEulerAngles: (eulerAngles) => {
     set({ eulerAngles })
   },
-  acceleration: null,
+  acceleration: { x: null, y: null, z: null },
+  // in meters per second squared
   setAcceleration: (acceleration) => {
     set({ acceleration })
   },

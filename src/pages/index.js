@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import useStore, { initSocket, useSocketData } from '@/helpers/store'
 import dynamic from 'next/dynamic'
