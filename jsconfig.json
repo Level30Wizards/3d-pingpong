@@ -6,9 +6,16 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["./src/**/*", "./pages/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./src/**/*",
+    "./pages/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
