@@ -19,7 +19,7 @@ const SphereComponent = () => {
       <ambientLight intensity={0.5} />
       <Sphere
         args={[1, 32, 32]}
-        position={[x, y, z]}
+        position={x ? [x, y, z] : undefined}
         onClick={() => {
           router.push(`/box`)
         }}
