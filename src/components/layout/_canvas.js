@@ -10,7 +10,7 @@ import { EffectComposer, Vignette } from '@react-three/postprocessing'
 const Bg = () => {
   const router = useStore((state) => state.router)
   const { bg } = useSpring({
-    bg: router && router.route !== '/box' ? 0 : 0x17 / 255,
+    bg: router && router.route !== '/box' ? 0 : 0x17 / 10,
   })
   return <a.color attach='background' r={bg} g={bg} b={bg} />
 }
@@ -25,15 +25,17 @@ const LCanvas = ({ children }) => {
         useStore.setState({ events })
       }}
     >
+      {/* The X axis is red. The Y axis is green. The Z axis is blue. */}
+      <axesHelper args={[5]} />
       <Preload all />
-      <Bg />
+      {/*<Bg />*/}
       <Perf openByDefault trackGPU={true} position={'bottom-right'} />
       <OrbitControls />
       {/* <MaterialEditor /> */}
       {/* <EffectComposer ref={useEditorComposer()}> */}
-      <EffectComposer>
+      {/* <EffectComposer>
         <Vignette eskil={false} offset={0.1} darkness={1.1} />
-      </EffectComposer>
+      </EffectComposer> */}
       {children}
     </Canvas>
   )

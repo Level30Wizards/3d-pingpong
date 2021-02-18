@@ -17,6 +17,8 @@ export const initSocket = () => {
   const { getState } = useSocketData
 
   socketIo.on('SWITCH_ROOMS', ({ room }) => {
+    console.log('switching rooms in store')
+
     getState().setRoom(room)
   })
 
@@ -44,7 +46,7 @@ export const useSocketData = create((set) => ({
   setEulerAngles: (eulerAngles) => {
     set({ eulerAngles })
   },
-  acceleration: { x: null, y: null, z: null },
+  acceleration: { x: 0, y: 0, z: 0 },
   // in meters per second squared
   setAcceleration: (acceleration) => {
     set({ acceleration })

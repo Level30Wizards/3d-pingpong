@@ -27,7 +27,7 @@ const match = (path) => {
 
 const withOffline = require('next-offline')
 const withTM = require('next-transpile-modules')(
-  ['three', '@react-three/drei'], // '@react-three/postprocessing'
+  ['three', '@react-three/drei', 'use-cannon', 'lodash-es'], // '@react-three/postprocessing'
   { debug: debug, __unstable_matcher: match } // symlink-caused loops which cause memory to get bloated exponentially.
 )
 
@@ -44,7 +44,12 @@ const nextConfig =
             {
               test: /\.(glsl|vs|fs|vert|frag)$/,
               exclude: /node_modules/,
-              use: ['raw-loader', 'glslify-loader'],
+              use: [
+                'raw-loader',
+                'glslify-loader',
+                'file-loader',
+                'url-loader',
+              ],
             }
           )
           return config
