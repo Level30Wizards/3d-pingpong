@@ -27,7 +27,7 @@ const match = (path) => {
 
 const withOffline = require('next-offline')
 const withTM = require('next-transpile-modules')(
-  ['three', '@react-three/drei', 'use-cannon', 'lodash-es'], // '@react-three/postprocessing'
+  ['three', '@react-three/drei', '@react-three/cannon', 'lodash-es'], // '@react-three/postprocessing'
   { debug: debug, __unstable_matcher: match } // symlink-caused loops which cause memory to get bloated exponentially.
 )
 

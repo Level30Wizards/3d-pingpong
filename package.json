@@ -14,7 +14,8 @@
     "build": "NODE_ENV=production next build",
     "prod": "NODE_ENV=production next build && next start",
     "export": "EXPORT=true next build && EXPORT=true next export",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "ngrok": "npx ngrok http 3000"
   },
   "husky": {
     "hooks": {
@@ -32,8 +33,10 @@
   "dependencies": {
     "@pmndrs/branding": "^0.0.4",
     "@react-spring/three": "^9.0.0-rc.3",
+    "@react-three/cannon": "^0.5.5",
     "@react-three/drei": "^3.4.1",
     "@react-three/postprocessing": "^1.5.0",
+    "cannon": "^0.6.2",
     "lerp": "^1.0.3",
     "lodash-es": "^4.17.20",
     "next": "^10.0.6",
@@ -47,7 +50,6 @@
     "socket.io-client": "^2.1.1",
     "tailwindcss": "^2.0.2",
     "three": "^0.125.2",
-    "use-cannon": "^0.5.0",
     "webpack": "^5.19.0",
     "zustand": "^3.3.2"
   },

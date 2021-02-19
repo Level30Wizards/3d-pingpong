@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useEffect } from 'react'
 import { Canvas, useFrame, useLoader } from 'react-three-fiber'
-import { Physics, useSphere, useBox, usePlane } from 'use-cannon'
+import { Physics, useSphere, useBox, usePlane } from '@react-three/cannon'
 import create from 'zustand'
 import lerp from 'lerp'
 import { clamp } from 'lodash-es'
