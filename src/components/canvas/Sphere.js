@@ -8,7 +8,6 @@ import React from 'react'
 
 const SphereComponent = (props, { color }) => {
   const router = useStore((s) => s.router)
-  console.log(props, color)
   // {/* The X axis is red. The Y axis is green. The Z axis is blue. */}
 
   return (

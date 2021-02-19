@@ -7,25 +7,7 @@ import { clamp } from 'lodash-es'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Text from '../components/canvas/Text'
 import { useTexture } from '@react-three/drei'
-import { useSocketData, initSocket } from '@/helpers/store'
-// import pingSound from '../resources/ping.mp3'
-// import earthImg from 'public/cross.jpg'
-
-// const ping = new Audio('/ping.mp3')
-const [useStore] = create((set, get) => ({
-  count: 0,
-  welcome: true,
-  api: {
-    pong(velocity) {
-      // ping.currentTime = 0
-      // ping.volume = clamp(velocity / 20, 0, 1)
-      // ping.play()
-      if (velocity > 4) set((state) => ({ count: state.count + 1 }))
-    },
-    reset: (welcome) =>
-      set((state) => ({ welcome, count: welcome ? state.count : 0 })),
-  },
-}))
+import { useSocketData, initSocket, gameStore } from '@/helpers/store'
 
 const cursor_xAxisPosition = (z) => {
   // computed using z euler angle
@@ -48,12 +30,11 @@ const cursor_yAxisPosition = (x) => {
 function Paddle() {
   const { nodes, materials } = useLoader(GLTFLoader, 'pingpong.glb')
 
-  const { pong } = useStore((state) => state.api)
-  const welcome = useStore((state) => state.welcome)
-  const count = useStore((state) => state.count)
+  const { pong } = gameStore((state) => state.api)
+  const welcome = gameStore((state) => state.welcome)
+  const count = gameStore((state) => state.count)
 
   const { x, y, z } = useSocketData((s) => s.eulerAngles)
-
   // detect if the user is pointing at the main display
   const userIsPointingAtScreen = () => {
     if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
@@ -70,9 +51,8 @@ function Paddle() {
     onCollide: (e) => pong(e.contact.impactVelocity),
   }))
 
-  console.log(ref, api, x, y, z)
-
   let values = useRef([0, 0])
+  console.log(x, y, z, cursor_xAxisPosition(z), cursor_yAxisPosition(x))
 
   useFrame((state) => {
     values.current[0] = lerp(
@@ -85,8 +65,6 @@ function Paddle() {
       (cursor_xAxisPosition(z) * Math.PI) / 5,
       0.2
     )
-
-    console.log(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
 
     api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
     api.rotation.set(0, 0, values.current[1])
@@ -176,7 +154,7 @@ function Ball() {
 }
 
 function ContactGround() {
-  const { reset } = useStore((state) => state.api)
+  const { reset } = gameStore((state) => state.api)
   const [ref] = usePlane(() => ({
     type: 'Static',
     rotation: [-Math.PI / 2, 0, 0],
@@ -187,8 +165,8 @@ function ContactGround() {
 }
 
 export default function Page() {
-  const welcome = useStore((state) => state.welcome)
-  const { reset } = useStore((state) => state.api)
+  const welcome = gameStore((state) => state.welcome)
+  const { reset } = gameStore((state) => state.api)
   useEffect(() => {
     initSocket()
   }, [])

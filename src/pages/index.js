@@ -83,15 +83,6 @@ const Page = () => {
     rz: z > 0 ? z / 10 : z,
   })
 
-  console.log({
-    position: [
-      cursor_xAxisPosition(),
-      cursor_yAxisPosition(),
-      cursor_zAxisPosition(),
-    ],
-    rotation: [rx, ry, rz],
-  })
-
   // const threshold = 12;
   // if (
   //   Math.abs(this.acceleration.x) > threshold ||
