@@ -16,7 +16,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Next: Chrome",
-      "url": "http://localhost:3000",
+      "url": "http://localhost:6969",
       "webRoot": "${workspaceFolder}",
       "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile"
     },
@@ -24,7 +24,7 @@
       "type": "firefox",
       "request": "launch",
       "name": "Next: Firefox",
-      "url": "http://localhost:3000",
+      "url": "http://localhost:6969",
       "webRoot": "${workspaceFolder}",
       "profileDir": "${workspaceFolder}/.vscode/firefox-debug-profile",
       "keepProfileChanges": true
