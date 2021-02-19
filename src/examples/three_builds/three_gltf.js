@@ -129,7 +129,7 @@ export { AnimationClip } from 'three/src/animation/AnimationClip.js'
 export { Uniform } from 'three/src/core/Uniform.js'
 //export { InstancedBufferGeometry } from 'three/src/core/InstancedBufferGeometry.js'
 export { BufferGeometry } from 'three/src/core/BufferGeometry.js'
-export { Geometry } from 'three/src/core/Geometry.js'
+// export { Geometry } from 'three/src/core/Geometry.js'
 // export { InterleavedBufferAttribute } from 'three/src/core/InterleavedBufferAttribute.js'
 export class InterleavedBufferAttribute {}
 //export { InstancedInterleavedBuffer } from 'three/src/core/InstancedInterleavedBuffer.js'
