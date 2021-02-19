@@ -11,7 +11,7 @@
     "eslint": "eslint --fix 'src/**/*.{js,jsx}' --ext jsconfig.json",
     "prettier": "prettier --list-different '**/*.{js,jsx,md}'",
     "dev": "node server/dev.js",
-    "build": "next build",
+    "build": "NODE_ENV=production next build && node server/dev.js",
     "export": "EXPORT=true next build && EXPORT=true next export",
     "analyze": "ANALYZE=true next build"
   },
