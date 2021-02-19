@@ -13,8 +13,6 @@ const BoxComponent = (props) => {
   // const { color } = useSpring({
   //   color: router.route !== '/box' ? 'black' : '#272727',
   // })
-  console.log(props.rotation)
-  console.log(props.position)
 
   return (
     <Suspense fallback={null}>

@@ -1,6 +1,6 @@
 import create from 'zustand'
 import io from 'socket.io-client'
-const socketIo = io('/')
+const socketIo = io('https://ftvzv.sse.codesandbox.io/')
 
 const useStore = create((set) => {
   return {
@@ -18,14 +18,15 @@ export const initSocket = () => {
 
   socketIo.on('SWITCH_ROOMS', ({ room }) => {
     console.log('switching rooms in store')
-
     getState().setRoom(room)
   })
 
-  socketIo.on('SEND_EULER_ANGLES', (allRooms) => {
+  socketIo.on('EULER_ANGLES', (allRooms) => {
+    console.log('SETTING_EULER_ANGLES')
     getState().setEulerAngles(allRooms)
   })
-  socketIo.on('SEND_ACCELERATION', (allRooms) => {
+  socketIo.on('ACCELERATION', (allRooms) => {
+    console.log('SETTING_ACCELERATION')
     getState().setAcceleration(allRooms)
   })
   socketIo.on('disconnect', () => {
@@ -50,6 +51,23 @@ export const useSocketData = create((set) => ({
   // in meters per second squared
   setAcceleration: (acceleration) => {
     set({ acceleration })
+  },
+}))
+
+const ping = new Audio('/ping.mp3')
+
+export const [gameStore] = create((set, get) => ({
+  count: 0,
+  welcome: true,
+  api: {
+    pong(velocity) {
+      ping.currentTime = 0
+      ping.volume = clamp(velocity / 20, 0, 1)
+      ping.play()
+      if (velocity > 4) set((state) => ({ count: state.count + 1 }))
+    },
+    reset: (welcome) =>
+      set((state) => ({ welcome, count: welcome ? state.count : 0 })),
   },
 }))
 
