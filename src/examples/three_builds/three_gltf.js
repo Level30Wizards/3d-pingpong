@@ -129,7 +129,7 @@ export { AnimationClip } from 'three/src/animation/AnimationClip.js'
 export { Uniform } from 'three/src/core/Uniform.js'
 //export { InstancedBufferGeometry } from 'three/src/core/InstancedBufferGeometry.js'
 export { BufferGeometry } from 'three/src/core/BufferGeometry.js'
-export { Geometry } from 'three/src/core/Geometry.js'
+// export { Geometry } from 'three/src/core/Geometry.js'
 // export { InterleavedBufferAttribute } from 'three/src/core/InterleavedBufferAttribute.js'
 export class InterleavedBufferAttribute {}
 //export { InstancedInterleavedBuffer } from 'three/src/core/InstancedInterleavedBuffer.js'
@@ -137,7 +137,7 @@ export class InterleavedBufferAttribute {}
 export class InterleavedBuffer {}
 //export { InstancedBufferAttribute } from 'three/src/core/InstancedBufferAttribute.js'
 export * from 'three/src/core/BufferAttribute.js'
-export { Face3 } from 'three/src/core/Face3.js'
+// export { Face3 } from 'three/src/core/Face3.js'
 export { Object3D } from 'three/src/core/Object3D.js'
 export { Raycaster } from 'three/src/core/Raycaster.js'
 // export class Raycaster {
