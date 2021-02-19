@@ -6,12 +6,13 @@
   ],
   "private": false,
   "scripts": {
-    "start": "node server/dev.js",
+    "start": "next start",
     "lint": "yarn prettier && yarn eslint",
     "eslint": "eslint --fix 'src/**/*.{js,jsx}' --ext jsconfig.json",
     "prettier": "prettier --list-different '**/*.{js,jsx,md}'",
     "dev": "node server/dev.js",
-    "build": "NODE_ENV=production next build && node server/dev.js",
+    "build": "NODE_ENV=production next build",
+    "prod": "NODE_ENV=production next build && next start",
     "export": "EXPORT=true next build && EXPORT=true next export",
     "analyze": "ANALYZE=true next build"
   },
