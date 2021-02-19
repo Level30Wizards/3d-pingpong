@@ -1,6 +1,8 @@
 import create from 'zustand'
 import io from 'socket.io-client'
-const socketIo = io('https://ftvzv.sse.codesandbox.io/')
+import clamp from 'lodash-es/clamp'
+
+const socketIo = io('/')
 
 const useStore = create((set) => {
   return {
@@ -16,20 +18,26 @@ export const initSocket = () => {
   // const { pathname } = window.location
   const { getState } = useSocketData
 
-  socketIo.on('SWITCH_ROOMS', ({ room }) => {
-    console.log('switching rooms in store')
+  socketIo.on('ROOM', (room) => {
+    console.log('first visit room', room)
     getState().setRoom(room)
   })
 
-  socketIo.on('EULER_ANGLES', (allRooms) => {
-    console.log('SETTING_EULER_ANGLES')
-    getState().setEulerAngles(allRooms)
+  socketIo.on('SWITCH_ROOMS', (room) => {
+    console.log('switching rooms in store', room)
+    getState().setRoom(room)
   })
-  socketIo.on('ACCELERATION', (allRooms) => {
-    console.log('SETTING_ACCELERATION')
-    getState().setAcceleration(allRooms)
+
+  socketIo.on('EULER_ANGLES', (eulerAngles) => {
+    console.log('SOCKET: SETTING_EULER_ANGLES', eulerAngles)
+    getState().setEulerAngles(eulerAngles)
+  })
+  socketIo.on('ACCELERATION', (acceleration) => {
+    console.log('SOCKET: SETTING_ACCELERATION', acceleration)
+    getState().setAcceleration(acceleration)
   })
   socketIo.on('disconnect', () => {
+    console.log('SOCKET: disconnect')
     getState().setRoom(null)
   })
 }
@@ -54,16 +62,16 @@ export const useSocketData = create((set) => ({
   },
 }))
 
-const ping = new Audio('/ping.mp3')
-
 export const [gameStore] = create((set, get) => ({
   count: 0,
   welcome: true,
+  ping: null,
+  setPing: (newPing) => set({ ping: newPing }),
   api: {
     pong(velocity) {
-      ping.currentTime = 0
-      ping.volume = clamp(velocity / 20, 0, 1)
-      ping.play()
+      get().ping.currentTime = 0
+      get().ping.volume = clamp(velocity / 20, 0, 1)
+      get().ping.play()
       if (velocity > 4) set((state) => ({ count: state.count + 1 }))
     },
     reset: (welcome) =>

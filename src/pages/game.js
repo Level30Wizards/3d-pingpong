@@ -28,13 +28,15 @@ const cursor_yAxisPosition = (x) => {
 }
 
 function Paddle() {
+  const ping = new Audio('/ping.mp3')
   const { nodes, materials } = useLoader(GLTFLoader, 'pingpong.glb')
 
+  const setPing = gameStore((state) => state.setPing)
   const { pong } = gameStore((state) => state.api)
   const welcome = gameStore((state) => state.welcome)
   const count = gameStore((state) => state.count)
 
-  const { x, y, z } = useSocketData((s) => s.eulerAngles)
+  const { x = 0, y = 0, z = 0 } = useSocketData((s) => s.eulerAngles)
   // detect if the user is pointing at the main display
   const userIsPointingAtScreen = () => {
     if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
@@ -52,7 +54,30 @@ function Paddle() {
   }))
 
   let values = useRef([0, 0])
-  console.log(x, y, z, cursor_xAxisPosition(z), cursor_yAxisPosition(x))
+  console.log({
+    ref,
+    api,
+    x,
+    y,
+    z,
+    cursor_xAxisPosition: cursor_xAxisPosition(z),
+    cursor_yAxisPosition: cursor_yAxisPosition(x),
+  })
+
+  setPing(ping)
+
+  // from demo
+
+  // useFrame(state => {
+  //   // The paddle is kinematic (not subject to gravitation), we move it with the api returned by useBox
+  //   values.current[0] = lerp(values.current[0], (state.mouse.x * Math.PI) / 5, 0.2)
+  //   values.current[1] = lerp(values.current[1], (state.mouse.x * Math.PI) / 5, 0.2)
+  //   api.position.set(state.mouse.x * 10, state.mouse.y * 5, 0)
+  //   api.rotation.set(0, 0, values.current[1])
+  //   // Left/right mouse movement rotates it a liitle for effect only
+  //   model.current.rotation.x = lerp(model.current.rotation.x, welcome ? Math.PI / 2 : 0, 0.2)
+  //   model.current.rotation.y = values.current[0]
+  // })
 
   useFrame((state) => {
     values.current[0] = lerp(
@@ -85,12 +110,9 @@ function Paddle() {
         position={[-0.05, 0.37, 0.3]}
         scale={[0.15, 0.15, 0.15]}
       >
-        <Text
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 1, 2]}
-          size={1}
-          children={count.toString()}
-        />
+        <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
+          {count.toString() || '0'}
+        </Text>
         <group rotation={[1.88, -0.35, 2.32]} scale={[2.97, 2.97, 2.97]}>
           <primitive object={nodes.Bone} />
           <primitive object={nodes.Bone003} />
@@ -171,7 +193,7 @@ export default function Page() {
     initSocket()
   }, [])
   const currentRoom = useSocketData((s) => s.currentRoom)
-  console.log(currentRoom)
+  console.log({ currentRoom })
 
   return (
     <>
@@ -229,7 +251,7 @@ export default function Page() {
           fontSize: '1.2em',
         }}
       >
-        {currentRoom}
+        Room: {currentRoom}
       </p>
 
       <div
