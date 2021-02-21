@@ -1240,9 +1240,9 @@
     "@react-spring/core" "9.0.0-rc.3"
     "@react-spring/shared" "9.0.0-rc.3"
 
-"@react-three/cannon@git+https://github.com/pmndrs/use-cannon.git#0ee22b01b961eea9a14427e526dc8f61ebfcd97d":
+"@react-three/cannon@github:pmndrs/use-cannon.git#0ee22b01b961eea9a14427e526dc8f61ebfcd97d":
   version "0.5.4"
-  resolved "git+https://github.com/pmndrs/use-cannon.git#0ee22b01b961eea9a14427e526dc8f61ebfcd97d"
+  resolved "https://codeload.github.com/pmndrs/use-cannon/tar.gz/0ee22b01b961eea9a14427e526dc8f61ebfcd97d"
   dependencies:
     react "^17.0.1"
     react-dom "^17.0.1"

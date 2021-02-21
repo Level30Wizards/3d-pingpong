@@ -33,7 +33,7 @@
   "dependencies": {
     "@pmndrs/branding": "^0.0.4",
     "@react-spring/three": "^9.0.0-rc.3",
-    "@react-three/cannon": "git+https://github.com/pmndrs/use-cannon.git#0ee22b01b961eea9a14427e526dc8f61ebfcd97d",
+    "@react-three/cannon": "github:pmndrs/use-cannon.git#0ee22b01b961eea9a14427e526dc8f61ebfcd97d",
     "@react-three/drei": "^3.8.6",
     "@react-three/postprocessing": "^1.5.1",
     "lerp": "^1.0.3",
