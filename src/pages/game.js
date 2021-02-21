@@ -77,7 +77,7 @@ function Paddle() {
   //   model.current.rotation.y = values.current[0]
   // })
 
-  console.log(x, y, z)
+  // console.log(x, y, z)
 
   useFrame((state) => {
     values.current[0] = lerp(
