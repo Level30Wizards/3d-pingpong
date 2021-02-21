@@ -53,8 +53,8 @@ const Page = () => {
   }
 
   function attemptToAttachEventListeners() {
-    window.removeEventListener('deviceorientation', handleOrientation)
-    window.removeEventListener('devicemotion', handleMotion, true)
+    // window.removeEventListener('deviceorientation', handleOrientation)
+    // window.removeEventListener('devicemotion', handleMotion, true)
 
     function requestDeviceOrientation() {
       if (
@@ -80,6 +80,7 @@ const Page = () => {
   }
 
   const [loopStop, loopStart, isActive] = useRafLoop((time) => {
+    console.log('sending via socket')
     // send euler angles
     socket.emit('SEND_EULER_ANGLES', {
       room: currentRoom,
