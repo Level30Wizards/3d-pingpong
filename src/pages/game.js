@@ -38,12 +38,12 @@ function Paddle() {
 
   const { x = 0, y = 0, z = 0 } = useSocketData((s) => s.eulerAngles)
   // detect if the user is pointing at the main display
-  const userIsPointingAtScreen = () => {
-    if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
-      return true
-    }
-    return false
-  }
+  // const userIsPointingAtScreen = () => {
+  //   if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
+  //     return true
+  //   }
+  //   return false
+  // }
 
   const model = useRef()
 
