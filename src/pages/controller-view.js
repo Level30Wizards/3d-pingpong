@@ -3,6 +3,7 @@ import useStore, { useSocketData } from '@/helpers/store'
 import dynamic from 'next/dynamic'
 import { useSpring } from '@react-spring/three'
 import React from 'react'
+import { useRafLoop } from 'react-use'
 
 const Box = dynamic(() => import('@/components/canvas/Box'), {
   ssr: false,
@@ -20,9 +21,9 @@ const Page = () => {
 
   const currentRoom = useSocketData((s) => s.currentRoom)
   const { setRoom } = useSocketData()
-  const setEulerAngles = useSocketData((s) => s.setEulerAngles)
-  const setAcceleration = useSocketData((s) => s.setAcceleration)
-  const acceleration = useSocketData((s) => s.acceleration)
+  // const setEulerAngles = useSocketData((s) => s.setEulerAngles)
+  // const setAcceleration = useSocketData((s) => s.setAcceleration)
+  // const acceleration = useSocketData((s) => s.acceleration)
   const socket = useSocketData((s) => s.socket)
   const roomNumber = useRef(null)
 
@@ -35,29 +36,19 @@ const Page = () => {
       y: Math.round(e.gamma),
       z: Math.round(360 - e.alpha),
     }
-    setEulerAngles(eulerAngles)
+    // setEulerAngles(eulerAngles)
     setEul(eulerAngles)
-    // send euler angles for main display (MainDisplayView)
-    socket.emit('SEND_EULER_ANGLES', {
-      room: currentRoom,
-      euler_angles: eulerAngles,
-    })
   }
   function handleMotion(e) {
-    setAcceleration({
-      x: acceleration.x + e.acceleration.x,
-      y: acceleration.y + e.acceleration.y,
-      z: acceleration.z + e.acceleration.z,
-    })
+    // setAcceleration({
+    //   x: acceleration.x + e.acceleration.x,
+    //   y: acceleration.y + e.acceleration.y,
+    //   z: acceleration.z + e.acceleration.z,
+    // })
     setAcc({
       x: Math.round(e.acceleration.x),
       y: Math.round(e.acceleration.y),
       z: Math.round(e.acceleration.z),
-    })
-    // send rate of acceleration for main display (MainDisplayView)
-    socket.emit('SEND_ACCELERATION', {
-      room: currentRoom,
-      acceleration: acceleration,
     })
   }
 
@@ -87,6 +78,19 @@ const Page = () => {
     }
     requestDeviceOrientation()
   }
+
+  const [loopStop, loopStart, isActive] = useRafLoop((time) => {
+    // send euler angles
+    socket.emit('SEND_EULER_ANGLES', {
+      room: currentRoom,
+      euler_angles: eul,
+    })
+    // send rate of acceleration
+    socket.emit('SEND_ACCELERATION', {
+      room: currentRoom,
+      acceleration: acc,
+    })
+  })
 
   const { x, y, z } = useSocketData((s) => s.eulerAngles)
   // const { x, y, z } = eulerAngles
@@ -165,6 +169,7 @@ const Page = () => {
               new_room: String(roomNumber.current.value),
             })
             setRoom(roomNumber.current.value)
+            loopStart()
             setClicked(true)
             attemptToAttachEventListeners()
           }

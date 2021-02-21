@@ -1,12 +1,12 @@
 import { Suspense } from 'react'
 import { Environment, MeshDistortMaterial } from '@react-three/drei'
 import { a, useSpring } from '@react-spring/three'
-// import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry'
 import { extend } from 'react-three-fiber'
 import useStore from '@/helpers/store'
 
 // const M = a(MeshDistortMaterial)
-// extend({ RoundedBoxGeometry })
+extend({ RoundedBoxGeometry })
 
 const BoxComponent = (props) => {
   const router = useStore((s) => s.router)
