@@ -200,7 +200,8 @@ export default function Page() {
   const currentRoom = useSocketData((s) => s.currentRoom)
   console.log({ currentRoom })
 
-  const { x = 0, y = 0, z = 0 } = useSocketData((s) => s.eulerAngles)
+  const eulerAngles = useSocketData((s) => s.eulerAngles)
+  const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
 
   return (
     <>
