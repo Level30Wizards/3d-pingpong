@@ -10,24 +10,26 @@ import { useWindowSize } from 'react-use'
 
 const cursor_xAxisPosition = (z) => {
   if (typeof window === 'undefined') return null
-  // computed using z euler angle
+  // computed using z euler angle, 0 to 360
   let newZ = z
-  newZ = newZ > 110 ? 110 : newZ
+  newZ = newZ > 180 ? 180 : newZ
+  newZ = newZ > 300 ? 0 : newZ
   newZ = newZ < 70 ? 70 : newZ
   newZ -= 70 // 40 > z > 0
 
-  // left = 0 and right = 100
-  return (window.innerWidth / 100) * (100 - Math.round(newZ / 40) * 100)
+  // left = 0 and right = 1
+  return window.innerWidth * (100 - Math.round(newZ / 40))
 }
 const cursor_yAxisPosition = (x) => {
   if (typeof window === 'undefined') return null
-  // computed using x
+  // computed using x, -180 to 180
   let newX = x
   newX = newX > 20 ? 20 : newX
   newX = newX < -20 ? -20 : newX
   newX += 20 // 40 > z > 0
-  // return 100 - ((newX / 40) * 100)
-  return (window.innerHeight / 100) * (100 - Math.round(newX / 40) * 100)
+  // return 100 - ((newX / 40))
+  // top = 0 and right = 1
+  return window.innerHeight * (100 - Math.round(newX / 40))
 }
 
 // detect if the user is pointing at the main display
