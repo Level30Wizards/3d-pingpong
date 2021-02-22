@@ -79,10 +79,6 @@ function Paddle({ x, y, z }) {
   // console.log(x, y, z)
 
   useFrame((state) => {
-    console.log({
-      x: cursor_xAxisPosition(z),
-      y: cursor_yAxisPosition(x),
-    })
     values.current[0] = lerp(
       values.current[0],
       (cursor_xAxisPosition(z) * Math.PI) / 5,
