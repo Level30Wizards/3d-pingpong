@@ -18,7 +18,7 @@ const cursor_xAxisPosition = (z) => {
   newZ -= 70 // 40 > z > 0
 
   // left = 0 and right = 1
-  return window.innerWidth * (100 - Math.round(newZ / 40))
+  return (window.innerWidth * (100 - Math.round((newZ / 40) * 100))) / 100
 }
 const cursor_yAxisPosition = (x) => {
   if (typeof window === 'undefined') return null
@@ -27,9 +27,9 @@ const cursor_yAxisPosition = (x) => {
   newX = newX > 20 ? 20 : newX
   newX = newX < -20 ? -20 : newX
   newX += 20 // 40 > z > 0
-  // return 100 - ((newX / 40))
+  // return 100 - ((newX / 40 * 100))
   // top = 0 and right = 1
-  return window.innerHeight * (100 - Math.round(newX / 40))
+  return (window.innerHeight * (100 - Math.round((newX / 40) * 100))) / 100
 }
 
 // detect if the user is pointing at the main display
