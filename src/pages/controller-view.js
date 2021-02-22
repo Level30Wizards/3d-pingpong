@@ -85,12 +85,13 @@ const Page = () => {
     socket.emit('SEND_EULER_ANGLES', {
       room: currentRoom,
       euler_angles: eul,
-    })
-    // send rate of acceleration
-    socket.emit('SEND_ACCELERATION', {
-      room: currentRoom,
       acceleration: acc,
     })
+    // // send rate of acceleration
+    // socket.emit('SEND_ACCELERATION', {
+    //   room: currentRoom,
+    //   acceleration: acc,
+    // })
   })
 
   const { x, y, z } = useSocketData((s) => s.eulerAngles)

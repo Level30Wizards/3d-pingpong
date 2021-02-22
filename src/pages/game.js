@@ -17,7 +17,7 @@ const cursor_xAxisPosition = (z) => {
   newZ -= 70 // 40 > z > 0
 
   // left = 0 and right = 100
-  return (window.innerWidth / 100) * (100 - (newZ / 40) * 100)
+  return (window.innerWidth / 100) * (100 - Math.round(newZ / 40) * 100)
 }
 const cursor_yAxisPosition = (x) => {
   if (typeof window === 'undefined') return null
@@ -27,7 +27,7 @@ const cursor_yAxisPosition = (x) => {
   newX = newX < -20 ? -20 : newX
   newX += 20 // 40 > z > 0
   // return 100 - ((newX / 40) * 100)
-  return (window.innerHeight / 100) * (100 - (newX / 40) * 100)
+  return (window.innerHeight / 100) * (100 - Math.round(newX / 40) * 100)
 }
 
 // detect if the user is pointing at the main display
@@ -105,8 +105,7 @@ function Paddle({ x, y, z }) {
         0.2
       )
 
-      // model.current.rotation.y = values.current[0]
-      model.current.rotation.y = y * 2
+      model.current.rotation.y = values.current[0]
     }
   })
 
@@ -271,8 +270,12 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: cursor_yAxisPosition(x),
-          left: cursor_xAxisPosition(z),
+          top: '-8px',
+          left: '-8px',
+          transform: `translate3d(${cursor_xAxisPosition(
+            z
+          )}, ${cursor_yAxisPosition(x)}, 0)`,
+          transition: 'transform 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
           height: '16px',

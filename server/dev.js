@@ -55,11 +55,12 @@ nextApp.prepare().then(() => {
     // SEND_EULER_ANGLES is emitted by Controller
     socket.on('SEND_EULER_ANGLES', function (data) {
       socket.broadcast.to(data.room).emit('EULER_ANGLES', data.euler_angles)
+      // socket.broadcast.to(data.room).emit('ACCELERATION', data.acceleration)
     })
     // SEND_ACCELERATION is emitted by Controller
-    socket.on('SEND_ACCELERATION', function (data) {
-      socket.broadcast.to(data.room).emit('ACCELERATION', data.acceleration)
-    })
+    // socket.on('SEND_ACCELERATION', function (data) {
+    //   socket.broadcast.to(data.room).emit('ACCELERATION', data.acceleration)
+    // })
 
     socket.on('disconnect', function () {
       log(`${socket.id} disconnected`)
