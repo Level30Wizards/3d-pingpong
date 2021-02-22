@@ -201,7 +201,10 @@ export default function Page() {
   }, [])
 
   const currentRoom = useSocketData((s) => s.currentRoom)
-  console.log({ currentRoom })
+
+  useEffect(() => {
+    console.log({ currentRoom })
+  }, [currentRoom])
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
@@ -274,7 +277,7 @@ export default function Page() {
           left: '-8px',
           transform: `translate3d(${cursor_xAxisPosition(
             z
-          )}, ${cursor_yAxisPosition(x)}, 0)`,
+          )}px, ${cursor_yAxisPosition(x)}px, 0)`,
           transition: 'transform 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
