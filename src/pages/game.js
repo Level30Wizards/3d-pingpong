@@ -95,11 +95,7 @@ function Paddle({ x, y, z }) {
       0.2
     )
 
-    api.position.set(
-      cursor_xAxisPosition(z) * 10,
-      cursor_yAxisPosition(x) * 5,
-      0
-    )
+    api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
     api.rotation.set(0, 0, values.current[1])
 
     if (model.current && model.current.rotation) {
