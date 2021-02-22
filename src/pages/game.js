@@ -101,13 +101,15 @@ function Paddle({ x, y, z }) {
     )
     api.rotation.set(0, 0, values.current[1])
 
-    model.current.rotation.x = lerp(
-      model.current.rotation.x,
-      welcome ? Math.PI / 2 : 0,
-      0.2
-    )
+    if (model.current && model.current.rotation) {
+      model.current.rotation.x = lerp(
+        model.current.rotation.x,
+        welcome ? Math.PI / 2 : 0,
+        0.2
+      )
 
-    model.current.rotation.y = values.current[0]
+      model.current.rotation.y = values.current[0]
+    }
   })
 
   return (
@@ -270,14 +272,17 @@ export default function Page() {
           borderRadius: '50%',
           top: cursor_yAxisPosition(x),
           left: cursor_xAxisPosition(z),
-          color: 'red',
+          backgroundColor: 'red',
+          width: '16px',
+          height: '16px',
+          zIndex: 1,
         }}
       />
       <div
         style={{
           position: 'absolute',
           display: welcome ? 'block' : 'none',
-          top: 50,
+          top: 80,
           left: 50,
           color: 'white',
           fontSize: '1.2em',
