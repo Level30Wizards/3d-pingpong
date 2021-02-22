@@ -25,7 +25,7 @@ const cursor_yAxisPosition = (x) => {
   return 100 - Math.round((newX / 40) * 100)
 }
 
-function Paddle() {
+function Paddle({ x, y, z }) {
   const ping = new Audio('/ping.mp3')
   const { nodes, materials } = useLoader(GLTFLoader, 'pingpong.glb')
 
@@ -34,7 +34,6 @@ function Paddle() {
   const welcome = gameStore((state) => state.welcome)
   const count = gameStore((state) => state.count)
 
-  const { x = 0, y = 0, z = 0 } = useSocketData((s) => s.eulerAngles)
   // detect if the user is pointing at the main display
   // const userIsPointingAtScreen = () => {
   //   if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
@@ -80,6 +79,10 @@ function Paddle() {
   // console.log(x, y, z)
 
   useFrame((state) => {
+    console.log({
+      x: cursor_xAxisPosition(z),
+      y: cursor_yAxisPosition(x),
+    })
     values.current[0] = lerp(
       values.current[0],
       (cursor_xAxisPosition(z) * Math.PI) / 5,
@@ -91,7 +94,11 @@ function Paddle() {
       0.2
     )
 
-    api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
+    api.position.set(
+      cursor_xAxisPosition(z) * 10,
+      cursor_yAxisPosition(x) * 5,
+      0
+    )
     api.rotation.set(0, 0, values.current[1])
 
     model.current.rotation.x = lerp(
@@ -195,6 +202,8 @@ export default function Page() {
   const currentRoom = useSocketData((s) => s.currentRoom)
   console.log({ currentRoom })
 
+  const { x = 0, y = 0, z = 0 } = useSocketData((s) => s.eulerAngles)
+
   return (
     <>
       <Canvas
@@ -237,7 +246,7 @@ export default function Page() {
           <ContactGround />
           {!welcome && <Ball />}
           <Suspense fallback={null}>
-            <Paddle />
+            <Paddle x={x} y={y} z={z} />
           </Suspense>
         </Physics>
       </Canvas>
@@ -252,8 +261,18 @@ export default function Page() {
         }}
       >
         Room: {currentRoom}
+        <br />
+        Coordinates (x, y, z): {x}, {y}, {z}
       </p>
-
+      <div
+        style={{
+          position: 'absolute',
+          borderRadius: '50%',
+          top: cursor_yAxisPosition(x),
+          left: cursor_xAxisPosition(z),
+          color: 'red',
+        }}
+      />
       <div
         style={{
           position: 'absolute',
