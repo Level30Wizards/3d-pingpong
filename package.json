@@ -11,7 +11,8 @@
     "eslint": "eslint --fix 'src/**/*.{js,jsx}' --ext jsconfig.json",
     "prettier": "prettier --list-different '**/*.{js,jsx,md}'",
     "dev": "node server/dev.js",
-    "build": "NODE_ENV=production next build",
+    "build:yarn": "yarn build",
+    "build": "next build",
     "prod": "NODE_ENV=production next build && next start",
     "export": "EXPORT=true next build && EXPORT=true next export",
     "analyze": "ANALYZE=true next build",
@@ -81,7 +82,8 @@
     "postcss": "^8.2.6",
     "prettier": "^2.2.1",
     "raw-loader": "^4.0.2",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "yarn": "^1.22.10"
   },
   "license": "MIT"
 }
