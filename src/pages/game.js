@@ -6,23 +6,36 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Text from '../components/canvas/Text'
 import { useTexture } from '@react-three/drei'
 import { useSocketData, initSocket, gameStore } from '@/helpers/store'
+import { useWindowSize } from 'react-use'
 
 const cursor_xAxisPosition = (z) => {
+  if (typeof window === 'undefined') return null
   // computed using z euler angle
   let newZ = z
   newZ = newZ > 110 ? 110 : newZ
   newZ = newZ < 70 ? 70 : newZ
   newZ -= 70 // 40 > z > 0
-  return 100 - Math.round((newZ / 40) * 100)
+
+  // left = 0 and right = 100
+  return (window.innerWidth / 100) * (100 - Math.round((newZ / 40) * 100))
 }
 const cursor_yAxisPosition = (x) => {
+  if (typeof window === 'undefined') return null
   // computed using x
   let newX = x
   newX = newX > 20 ? 20 : newX
   newX = newX < -20 ? -20 : newX
   newX += 20 // 40 > z > 0
   // return 100 - Math.round((newX / 40) * 100)
-  return 100 - Math.round((newX / 40) * 100)
+  return (window.innerHeight / 100) * (100 - Math.round((newX / 40) * 100))
+}
+
+// detect if the user is pointing at the main display
+const userIsPointingAtScreen = (z, x) => {
+  if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
+    return true
+  }
+  return false
 }
 
 function Paddle({ x, y, z }) {
@@ -33,14 +46,6 @@ function Paddle({ x, y, z }) {
   const { pong } = gameStore((state) => state.api)
   const welcome = gameStore((state) => state.welcome)
   const count = gameStore((state) => state.count)
-
-  // detect if the user is pointing at the main display
-  // const userIsPointingAtScreen = () => {
-  //   if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
-  //     return true
-  //   }
-  //   return false
-  // }
 
   const model = useRef()
 
@@ -104,7 +109,8 @@ function Paddle({ x, y, z }) {
         0.2
       )
 
-      model.current.rotation.y = values.current[0]
+      // model.current.rotation.y = values.current[0]
+      model.current.rotation.y = y * 2
     }
   })
 
@@ -194,9 +200,11 @@ function ContactGround() {
 export default function Page() {
   const welcome = gameStore((state) => state.welcome)
   const { reset } = gameStore((state) => state.api)
+
   useEffect(() => {
     initSocket()
   }, [])
+
   const currentRoom = useSocketData((s) => s.currentRoom)
   console.log({ currentRoom })
 
@@ -267,9 +275,9 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: cursor_yAxisPosition(x),
-          left: cursor_xAxisPosition(z),
-          backgroundColor: 'red',
+          top: `calc(50% + ${cursor_yAxisPosition(x)}px)`,
+          left: `calc(50% + ${cursor_xAxisPosition(z)}px)`,
+          backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
           height: '16px',
           zIndex: 1,

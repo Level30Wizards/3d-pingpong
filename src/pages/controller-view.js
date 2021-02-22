@@ -34,7 +34,7 @@ const Page = () => {
     const eulerAngles = {
       x: Math.round(e.beta),
       y: Math.round(e.gamma),
-      z: Math.round(360 - e.alpha),
+      z: Math.round(e.alpha),
     }
     // setEulerAngles(eulerAngles)
     setEul(eulerAngles)

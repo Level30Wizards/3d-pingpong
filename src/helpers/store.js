@@ -19,25 +19,20 @@ export const initSocket = () => {
   const { getState } = useSocketData
 
   socketIo.on('ROOM', (room) => {
-    console.log('first visit room', room)
     getState().setRoom(room)
   })
 
   socketIo.on('SWITCH_ROOMS', (room) => {
-    console.log('switching rooms in store', room)
     getState().setRoom(room)
   })
 
   socketIo.on('EULER_ANGLES', (eulerAngles) => {
-    console.log('SOCKET: SETTING_EULER_ANGLES', eulerAngles)
     getState().setEulerAngles(eulerAngles)
   })
   socketIo.on('ACCELERATION', (acceleration) => {
-    console.log('SOCKET: SETTING_ACCELERATION', acceleration)
     getState().setAcceleration(acceleration)
   })
   socketIo.on('disconnect', () => {
-    console.log('SOCKET: disconnect')
     getState().setRoom(null)
   })
 }
