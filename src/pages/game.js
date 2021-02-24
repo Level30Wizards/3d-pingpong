@@ -114,16 +114,9 @@ function Paddle({ x, y, z, SENSITIVITY }) {
   // console.log(x, y, z)
 
   useFrame((state) => {
-    values.current[0] = lerp(
-      values.current[0],
-      (cursor_xAxisPosition(z, SENSITIVITY) * Math.PI) / 5,
-      0.2
-    )
-    values.current[1] = lerp(
-      values.current[1],
-      (cursor_xAxisPosition(z, SENSITIVITY) * Math.PI) / 5,
-      0.2
-    )
+    // rescale.clamped(90, 270, -10, 10, newX)
+    values.current[0] = lerp(values.current[0], y, 0.2)
+    values.current[1] = lerp(values.current[1], y, 0.2)
 
     api.position.set(
       cursor_xAxisPosition(z, SENSITIVITY),
