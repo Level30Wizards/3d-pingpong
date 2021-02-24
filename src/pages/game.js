@@ -44,23 +44,20 @@ const cursor_xAxisPosition = (z, SENSITIVITY) => {
 const cursor_yAxisPosition = (x, SENSITIVITY) => {
   if (typeof window === 'undefined' || x === 0) return 0
   // computed using x, -180 to 180
-  let newX = x
+  let newX = x + 180
 
-  // newX = newX > 20 ? 20 : newX
-  // newX = newX < -20 ? -20 : newX
-  // newX += 20 // 40 > z > 0
-  // // return 100 - ((newX / 40 * 100))
-  // const notNull =
-  //   window.innerHeight / (100 - Math.round((newX / 40) * 100)) ||
-  //   window.innerHeight
-  // // top = 0 and right = 1
-  // // return newX * Math.sin((30 / 180) * Math.PI)
-  // return notNull
-  newX = newX > 0 ? newX : -newX
-  // newX = newX > 110 ? 110 : newX
-  // newX = newX < 70 ? 70 : newX
-  newX = (newX / 18) * SENSITIVITY
-  return newX
+  // computed using x, 0 to 360
+  // 180 is pointing at screen
+  newX = newX > 270 ? 270 : newX // this is overswing up
+  newX = newX < 90 ? 90 : newX //this is overswing down
+
+  /**
+   * if newX is 90 it should return 0
+   * if newX is 0 it should return 10
+   * if newX is 180 it should return -10
+   */
+
+  return rescale.clamped(90, 270, -10, 10, newX) * SENSITIVITY
 }
 
 // detect if the user is pointing at the main display
@@ -357,13 +354,24 @@ export default function Page() {
       >
         * click to start ...
       </div>
-      <input
-        type='number'
-        defaultValue={2}
-        onChange={(e) => {
-          setSensitivity(Number(e.value))
+      <div
+        style={{
+          position: 'absolute',
+          top: 50,
+          right: 50,
+          color: 'white',
+          fontSize: '1.2em',
         }}
-      />
+      >
+        Change sensitivity
+        <input
+          type='number'
+          defaultValue={2}
+          onChange={(e) => {
+            setSensitivity(Number(e.value))
+          }}
+        />
+      </div>
     </>
   )
 }
