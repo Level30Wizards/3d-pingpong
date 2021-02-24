@@ -8,42 +8,44 @@ import { useTexture } from '@react-three/drei'
 import { useSocketData, initSocket, gameStore } from '@/helpers/store'
 import { useWindowSize } from 'react-use'
 
+function rescale(from_min, from_max, to_min, to_max, from) {
+  return (
+    to_min + (to_max - to_min) * ((from_min - from) / (from_min - from_max))
+  )
+}
+rescale.clamped = function (from_min, from_max, to_min, to_max, from) {
+  from = this(from_min, from_max, to_min, to_max, from)
+  if (to_min < to_max) {
+    if (from < to_min) return to_min
+    else if (from > to_max) return to_max
+  } else {
+    if (from < to_max) return to_max
+    else if (from > to_min) return to_min
+  }
+  return from
+}
+
 const cursor_xAxisPosition = (z, SENSITIVITY) => {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined' || z === 0) return 0
   // computed using z euler angle, 0 to 360
   let newZ = z
-  // newZ = newZ > 180 ? 180 : newZ
-  // newZ = newZ > 300 ? 0 : newZ //this is overswing
-  // newZ = newZ < 70 ? 70 : newZ
 
-  // left = 0 and right = 1
-  // return newZ * Math.cos((30 / 180) * Math.PI)
-  // // var y = cy + r*Math.sin(30/180 * Math.PI);
-
-  // // should become, -10 to +10
-  // // -1.0 + 2.0 * (double)Mouse.getX() / window.width;
-  // console.log(newZ / Math.PI)
-  // console.log(-1 + (2 * newZ) / window.innerWidth)
-  // return (window.innerWidth * (100 - Math.round((newZ / 40) * 100))) / 100
+  newZ = newZ > 180 ? 180 : newZ // this is overswing to the left
+  newZ = newZ > 270 ? 0 : newZ //this is overswing to the right
 
   /**
-   * newZ is between -180 and 180
    * if newZ is 90 it should return 0
    * if newZ is 0 it should return 10
    * if newZ is 180 it should return -10
    */
 
-  newZ = newZ / 2
-  newZ -= 90
-  newZ = newZ > 0 ? newZ : -newZ
-  newZ = (newZ / 18) * SENSITIVITY
-  return newZ
-  // return window.innerWidth / (100 - Math.round((newZ / 40) * 100))
+  return rescale.clamped(0, 180, 10, -10, newZ) * SENSITIVITY
 }
 const cursor_yAxisPosition = (x, SENSITIVITY) => {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined' || x === 0) return 0
   // computed using x, -180 to 180
   let newX = x
+
   // newX = newX > 20 ? 20 : newX
   // newX = newX < -20 ? -20 : newX
   // newX += 20 // 40 > z > 0
