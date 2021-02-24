@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useEffect } from 'react'
+import React, { useState, Suspense, useRef, useEffect } from 'react'
 import { Canvas, useFrame, useLoader } from 'react-three-fiber'
 import { Physics, useSphere, useBox, usePlane } from '@react-three/cannon'
 import lerp from 'lerp'
@@ -12,13 +12,27 @@ const cursor_xAxisPosition = (z) => {
   if (typeof window === 'undefined') return null
   // computed using z euler angle, 0 to 360
   let newZ = z
-  newZ = newZ > 180 ? 180 : newZ
-  newZ = newZ > 300 ? 0 : newZ
-  newZ = newZ < 70 ? 70 : newZ
-  newZ -= 70 // 40 > z > 0
+  // newZ = newZ > 180 ? 180 : newZ
+  // newZ = newZ > 300 ? 0 : newZ
+  // newZ = newZ < 70 ? 70 : newZ
+  // newZ -= 70 // 40 > z > 0
 
   // left = 0 and right = 1
-  return (window.innerWidth * (100 - Math.round((newZ / 40) * 100))) / 100
+  // return newZ * Math.cos((30 / 180) * Math.PI)
+  // // var y = cy + r*Math.sin(30/180 * Math.PI);
+
+  // // should become, -10 to +10
+  // // -1.0 + 2.0 * (double)Mouse.getX() / window.width;
+  // console.log(newZ / Math.PI)
+  // console.log(-1 + (2 * newZ) / window.innerWidth)
+  // return (window.innerWidth * (100 - Math.round((newZ / 40) * 100))) / 100
+  newZ -= 180
+  newZ = newZ > 0 ? newZ : -newZ
+  // newZ = newZ > 110 ? 110 : newZ
+  // newZ = newZ < 70 ? 70 : newZ
+  newZ = newZ / 18 // 40 > z > 0
+  return newZ
+  // return window.innerWidth / (100 - Math.round((newZ / 40) * 100))
 }
 const cursor_yAxisPosition = (x) => {
   if (typeof window === 'undefined') return null
@@ -29,7 +43,8 @@ const cursor_yAxisPosition = (x) => {
   newX += 20 // 40 > z > 0
   // return 100 - ((newX / 40 * 100))
   // top = 0 and right = 1
-  return (window.innerHeight * (100 - Math.round((newX / 40) * 100))) / 100
+  // return newX * Math.sin((30 / 180) * Math.PI)
+  return window.innerHeight / (100 - Math.round((newX / 40) * 100))
 }
 
 // detect if the user is pointing at the main display
@@ -47,7 +62,7 @@ function Paddle({ x, y, z }) {
   const setPing = gameStore((state) => state.setPing)
   const { pong } = gameStore((state) => state.api)
   const welcome = gameStore((state) => state.welcome)
-  const count = gameStore((state) => state.count)
+  // const count = gameStore((state) => state.count)
 
   const model = useRef()
 
@@ -59,11 +74,11 @@ function Paddle({ x, y, z }) {
 
   let values = useRef([0, 0])
   console.log({
-    ref,
-    api,
-    x,
-    y,
-    z,
+    // ref,
+    // api,
+    // x,
+    // y,
+    // z,
     cursor_xAxisPosition: cursor_xAxisPosition(z),
     cursor_yAxisPosition: cursor_yAxisPosition(x),
   })
@@ -97,7 +112,11 @@ function Paddle({ x, y, z }) {
       0.2
     )
 
-    api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
+    api.position.set(
+      cursor_xAxisPosition(z) / 1000,
+      cursor_yAxisPosition(x) / 1000,
+      0
+    )
     api.rotation.set(0, 0, values.current[1])
 
     if (model.current && model.current.rotation) {
@@ -118,9 +137,9 @@ function Paddle({ x, y, z }) {
         position={[-0.05, 0.37, 0.3]}
         scale={[0.15, 0.15, 0.15]}
       >
-        <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
+        {/* <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
           {count.toString() || '0'}
-        </Text>
+        </Text> */}
         <group rotation={[1.88, -0.35, 2.32]} scale={[2.97, 2.97, 2.97]}>
           <primitive object={nodes.Bone} />
           <primitive object={nodes.Bone003} />
@@ -203,6 +222,7 @@ export default function Page() {
   }, [])
 
   const currentRoom = useSocketData((s) => s.currentRoom)
+  const setEulerAngles = useSocketData((s) => s.setEulerAngles)
 
   useEffect(() => {
     console.log({ currentRoom })
@@ -210,6 +230,26 @@ export default function Page() {
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
+
+  useEffect(() => {
+    const setEulerValue = (e) => {
+      setEulerAngles({
+        x: Math.round(e.beta),
+        y: Math.round(e.gamma),
+        z: Math.round(e.alpha),
+      })
+    }
+    if (
+      typeof window !== 'undefined' &&
+      window.location.href.includes('localhost')
+    ) {
+      console.log('you are testing')
+      window.addEventListener('deviceorientation', setEulerValue)
+
+      return () =>
+        window.removeEventListener('deviceorientation', setEulerValue)
+    }
+  }, [])
 
   return (
     <>
