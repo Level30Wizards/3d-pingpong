@@ -75,7 +75,7 @@ function Paddle({ x, y, z, SENSITIVITY }) {
   const setPing = gameStore((state) => state.setPing)
   const { pong } = gameStore((state) => state.api)
   const welcome = gameStore((state) => state.welcome)
-  // const count = gameStore((state) => state.count)
+  const count = gameStore((state) => state.count)
 
   const model = useRef()
 
@@ -145,9 +145,9 @@ function Paddle({ x, y, z, SENSITIVITY }) {
         position={[-0.05, 0.37, 0.3]}
         scale={[0.15, 0.15, 0.15]}
       >
-        {/* <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
+        <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
           {count.toString() || '0'}
-        </Text> */}
+        </Text>
         <group rotation={[1.88, -0.35, 2.32]} scale={[2.97, 2.97, 2.97]}>
           <primitive object={nodes.Bone} />
           <primitive object={nodes.Bone003} />
@@ -167,7 +167,7 @@ function Paddle({ x, y, z, SENSITIVITY }) {
             castShadow
             receiveShadow
             material={materials.wood}
-            // geometry={nodes.mesh_0.geometry}
+            geometry={nodes.mesh_0.geometry}
           />
           <mesh
             castShadow
