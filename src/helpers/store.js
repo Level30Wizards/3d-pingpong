@@ -17,6 +17,7 @@ const useStore = create((set) => {
 export const initSocket = () => {
   // const { pathname } = window.location
   const { getState } = useSocketData
+  const { getGameState = getState } = gameStore
 
   socketIo.on('ROOM', (room) => {
     getState().setRoom(room)
@@ -26,7 +27,7 @@ export const initSocket = () => {
     getState().setRoom(room)
   })
   socketIo.on('NEW_GAME', () => {
-    getState().api.reset(true)
+    getGameState().welcome && getGameState().api.reset(false)
   })
 
   socketIo.on('EULER_ANGLES', (eulerAngles) => {
