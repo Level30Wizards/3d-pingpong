@@ -38,16 +38,21 @@ const cursor_yAxisPosition = (x) => {
   if (typeof window === 'undefined') return null
   // computed using x, -180 to 180
   let newX = x
-  newX = newX > 20 ? 20 : newX
-  newX = newX < -20 ? -20 : newX
-  newX += 20 // 40 > z > 0
-  // return 100 - ((newX / 40 * 100))
-  const notNull =
-    window.innerHeight / (100 - Math.round((newX / 40) * 100)) ||
-    window.innerHeight
-  // top = 0 and right = 1
-  // return newX * Math.sin((30 / 180) * Math.PI)
-  return notNull
+  // newX = newX > 20 ? 20 : newX
+  // newX = newX < -20 ? -20 : newX
+  // newX += 20 // 40 > z > 0
+  // // return 100 - ((newX / 40 * 100))
+  // const notNull =
+  //   window.innerHeight / (100 - Math.round((newX / 40) * 100)) ||
+  //   window.innerHeight
+  // // top = 0 and right = 1
+  // // return newX * Math.sin((30 / 180) * Math.PI)
+  // return notNull
+  newX = newX > 0 ? newX : -newX
+  // newX = newX > 110 ? 110 : newX
+  // newX = newX < 70 ? 70 : newX
+  newX = newX / 18 // 40 > z > 0
+  return newX
 }
 
 // detect if the user is pointing at the main display
@@ -115,11 +120,7 @@ function Paddle({ x, y, z }) {
       0.2
     )
 
-    api.position.set(
-      cursor_xAxisPosition(z) / 1000,
-      cursor_yAxisPosition(x) / 1000,
-      0
-    )
+    api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
     api.rotation.set(0, 0, values.current[1])
 
     if (model.current && model.current.rotation) {
@@ -318,8 +319,8 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: '50%',
-          left: '-8px',
+          top: '-8px',
+          left: '50%',
           transform: `translate3d(${
             cursor_xAxisPosition(z) * 5
           }%, ${cursor_yAxisPosition(x)}px, 0)`,
