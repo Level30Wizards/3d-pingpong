@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useStore, { useSocketData } from '@/helpers/store'
 import dynamic from 'next/dynamic'
 import { useSpring } from '@react-spring/three'
@@ -21,9 +21,7 @@ const Page = () => {
 
   const currentRoom = useSocketData((s) => s.currentRoom)
   const { setRoom } = useSocketData()
-  // const setEulerAngles = useSocketData((s) => s.setEulerAngles)
-  // const setAcceleration = useSocketData((s) => s.setAcceleration)
-  // const acceleration = useSocketData((s) => s.acceleration)
+
   const socket = useSocketData((s) => s.socket)
   const roomNumber = useRef(null)
 
@@ -36,15 +34,10 @@ const Page = () => {
       y: Math.round(e.gamma),
       z: Math.round(e.alpha),
     }
-    // setEulerAngles(eulerAngles)
     setEul(eulerAngles)
   }
+
   function handleMotion(e) {
-    // setAcceleration({
-    //   x: acceleration.x + e.acceleration.x,
-    //   y: acceleration.y + e.acceleration.y,
-    //   z: acceleration.z + e.acceleration.z,
-    // })
     setAcc({
       x: Math.round(e.acceleration.x),
       y: Math.round(e.acceleration.y),
@@ -52,35 +45,35 @@ const Page = () => {
     })
   }
 
-  function attemptToAttachEventListeners() {
-    // window.removeEventListener('deviceorientation', handleOrientation)
-    // window.removeEventListener('devicemotion', handleMotion, true)
+  useEffect(() => {
+    if (!clicked) return
 
-    function requestDeviceOrientation() {
-      if (
-        typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function'
-      ) {
-        DeviceOrientationEvent.requestPermission()
-          .then((permissionState) => {
-            if (permissionState === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation)
-              window.addEventListener('devicemotion', handleMotion, true)
-            }
-          })
-          .catch(console.error)
-      } else {
-        // handle regular non iOS 13+ devices
-        console.log('not iOS')
-        window.addEventListener('deviceorientation', handleOrientation)
-        window.addEventListener('devicemotion', handleMotion, true)
-      }
+    if (
+      typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function'
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation)
+            window.addEventListener('devicemotion', handleMotion, true)
+          }
+        })
+        .catch(console.error)
+    } else {
+      // handle regular non iOS 13+ devices
+      console.log('not iOS')
+      window.addEventListener('deviceorientation', handleOrientation)
+      window.addEventListener('devicemotion', handleMotion, true)
     }
-    requestDeviceOrientation()
-  }
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation)
+      window.removeEventListener('devicemotion', handleMotion)
+    }
+  }, [clicked])
 
   const [loopStop, loopStart, isActive] = useRafLoop((time) => {
-    console.log('sending via socket')
     // send euler angles
     socket.emit('SEND_EULER_ANGLES', {
       room: currentRoom,
@@ -136,21 +129,22 @@ const Page = () => {
               new_room: String(roomNumber.current.value),
             })
             setRoom(roomNumber.current.value)
-            loopStart()
             setClicked(true)
-            attemptToAttachEventListeners()
+            loopStart()
           }
         }}
       >
         Connect to display
       </button>
-      <div>
-        <p>{JSON.stringify(acc)}</p>
-        <p>{JSON.stringify(eul)}</p>
-      </div>
+      {/* // <div>
+      //   <p>{JSON.stringify(acc)}</p>
+      //   <p>{JSON.stringify(eul)}</p>
+      // </div> */}
       <button
         onClick={() => {
-          socket.emit('NEW_GAME')
+          socket.emit('NEW_GAME', {
+            room: currentRoom,
+          })
         }}
         style={{
           width: '18rem',

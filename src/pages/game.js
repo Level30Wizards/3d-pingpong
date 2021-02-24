@@ -195,17 +195,19 @@ function ContactGround() {
 }
 
 export default function Page() {
-  const welcome = gameStore((state) => state.welcome)
-  const { reset } = gameStore((state) => state.api)
-
   useEffect(() => {
     initSocket()
   }, [])
+
+  const welcome = gameStore((state) => state.welcome)
+  const { reset } = gameStore((state) => state.api)
 
   const currentRoom = useSocketData((s) => s.currentRoom)
   // const setEulerAngles = useSocketData((s) => s.setEulerAngles)
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
+  console.log(eulerAngles)
+
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
 
   const [SENSITIVITY, setSensitivity] = useState(2)
