@@ -203,36 +203,32 @@ export default function Page() {
   }, [])
 
   const currentRoom = useSocketData((s) => s.currentRoom)
-  const setEulerAngles = useSocketData((s) => s.setEulerAngles)
-
-  useEffect(() => {
-    console.log({ currentRoom })
-  }, [currentRoom])
+  // const setEulerAngles = useSocketData((s) => s.setEulerAngles)
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
 
   const [SENSITIVITY, setSensitivity] = useState(2)
 
-  useEffect(() => {
-    const setEulerValue = (e) => {
-      setEulerAngles({
-        x: Math.round(e.beta),
-        y: Math.round(e.gamma),
-        z: Math.round(e.alpha),
-      })
-    }
-    if (
-      typeof window !== 'undefined' &&
-      window.location.href.includes('localhost')
-    ) {
-      console.log('you are testing')
-      window.addEventListener('deviceorientation', setEulerValue)
+  // useEffect(() => {
+  //   const setEulerValue = (e) => {
+  //     setEulerAngles({
+  //       x: Math.round(e.beta),
+  //       y: Math.round(e.gamma),
+  //       z: Math.round(e.alpha),
+  //     })
+  //   }
+  //   if (
+  //     typeof window !== 'undefined' &&
+  //     window.location.href.includes('localhost')
+  //   ) {
+  //     console.log('you are testing')
+  //     window.addEventListener('deviceorientation', setEulerValue)
 
-      return () =>
-        window.removeEventListener('deviceorientation', setEulerValue)
-    }
-  }, [])
+  //     return () =>
+  //       window.removeEventListener('deviceorientation', setEulerValue)
+  //   }
+  // }, [])
 
   return (
     <>
