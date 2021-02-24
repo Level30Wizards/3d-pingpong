@@ -28,8 +28,13 @@ const cursor_xAxisPosition = (z, SENSITIVITY) => {
 
   /**
    * newZ is between -180 and 180
+   * if newZ is 90 it should return 0
+   * if newZ is 0 it should return 10
+   * if newZ is 180 it should return -10
    */
-  newZ -= 180
+
+  newZ = newZ / 2
+  newZ -= 90
   newZ = newZ > 0 ? newZ : -newZ
   newZ = (newZ / 18) * SENSITIVITY
   return newZ
@@ -330,7 +335,7 @@ export default function Page() {
           transform: `translate3d(${cursor_xAxisPosition(
             z,
             SENSITIVITY
-          )}%, ${cursor_yAxisPosition(x, SENSITIVITY)}%, 0)`,
+          )}vw, ${cursor_yAxisPosition(x, SENSITIVITY)}vh, 0)`,
           transition: 'transform 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
