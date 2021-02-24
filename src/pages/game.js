@@ -42,9 +42,12 @@ const cursor_yAxisPosition = (x) => {
   newX = newX < -20 ? -20 : newX
   newX += 20 // 40 > z > 0
   // return 100 - ((newX / 40 * 100))
+  const notNull =
+    window.innerHeight / (100 - Math.round((newX / 40) * 100)) ||
+    window.innerHeight
   // top = 0 and right = 1
   // return newX * Math.sin((30 / 180) * Math.PI)
-  return window.innerHeight / (100 - Math.round((newX / 40) * 100))
+  return notNull
 }
 
 // detect if the user is pointing at the main display
@@ -315,11 +318,11 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: '-8px',
+          top: '50%',
           left: '-8px',
-          transform: `translate3d(${cursor_xAxisPosition(
-            z
-          )}px, ${cursor_yAxisPosition(x)}px, 0)`,
+          transform: `translate3d(${
+            cursor_xAxisPosition(z) * 5
+          }%, ${cursor_yAxisPosition(x)}px, 0)`,
           transition: 'transform 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
