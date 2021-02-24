@@ -95,37 +95,8 @@ const Page = () => {
   })
 
   const { x, y, z } = useSocketData((s) => s.eulerAngles)
-  // const { x, y, z } = eulerAngles
   const { ax, ay, az } = useSocketData((s) => s.acceleration)
-  // const { ax, ay, az } = acceleration
 
-  // console.log(x, y, z)
-  // const cursor_xAxisPosition = () => {
-  //   // computed using z
-  //   let newZ = z
-  //   newZ = newZ > 110 ? 110 : newZ
-  //   newZ = newZ < 70 ? 70 : newZ
-  //   newZ -= 70 // 40 > z > 0
-  //   return Math.round((newZ / 40) * 100)
-  // }
-  // const cursor_yAxisPosition = () => {
-  //   // computed using x
-  //   let newX = x
-  //   newX = newX > 20 ? 20 : newX
-  //   newX = newX < -20 ? -20 : newX
-  //   newX += 20 // 40 > z > 0
-  //   // return 100 - Math.round((newX / 40) * 100)
-  //   return Math.round(newX / 40)
-  // }
-  // const cursor_zAxisPosition = () => {
-  //   // computed using y
-  //   let newY = y
-  //   newY = newY > 20 ? 20 : newY
-  //   newY = newY < -20 ? -20 : newY
-  //   newY += 20 // 40 > z > 0
-  //   // return 100 - Math.round((newY / 40) * 100)
-  //   return Math.round(newY / 40)
-  // }
   // detect if the user is pointing at the main display
   const userIsPointingAtScreen = () => {
     if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
@@ -141,12 +112,6 @@ const Page = () => {
   return (
     <>
       {/* <Box r3f color={color} rotation={[cx, cz, cy]} />*/}
-      <Box
-        r3f
-        color={color}
-        rotation={[x / 50, -(z / 50), -(y / 50)]}
-        position={[ax, ay, az]}
-      />
       <h2>Pair controller</h2>
       <input
         style={{
@@ -183,6 +148,23 @@ const Page = () => {
         <p>{JSON.stringify(acc)}</p>
         <p>{JSON.stringify(eul)}</p>
       </div>
+      <button
+        onClick={() => {
+          socket.emit('NEW_GAME')
+        }}
+        style={{
+          width: '18rem',
+          height: '4rem',
+          background: 'green',
+          color: 'white',
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        Click here to start
+      </button>
     </>
   )
 }

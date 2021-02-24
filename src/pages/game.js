@@ -86,37 +86,10 @@ function Paddle({ x, y, z, SENSITIVITY }) {
   }))
 
   let values = useRef([0, 0])
-  console.log({
-    // ref,
-    // api,
-    // x,
-    // y,
-    // z,
-    cursor_xAxisPosition: cursor_xAxisPosition(z, SENSITIVITY),
-    cursor_yAxisPosition: cursor_yAxisPosition(x, SENSITIVITY),
-  })
 
   setPing(ping)
 
-  // from demo
-
-  // useFrame(state => {
-  //   // The paddle is kinematic (not subject to gravitation), we move it with the api returned by useBox
-  //   values.current[0] = lerp(values.current[0], (state.mouse.x * Math.PI) / 5, 0.2)
-  //   values.current[1] = lerp(values.current[1], (state.mouse.x * Math.PI) / 5, 0.2)
-  //   api.position.set(state.mouse.x * 10, state.mouse.y * 5, 0)
-  //   api.rotation.set(0, 0, values.current[1])
-  //   // Left/right mouse movement rotates it a liitle for effect only
-  //   model.current.rotation.x = lerp(model.current.rotation.x, welcome ? Math.PI / 2 : 0, 0.2)
-  //   model.current.rotation.y = values.current[0]
-  // })
-
-  // console.log(x, y, z)
-
   useFrame((state) => {
-    // rescale.clamped(90, 270, -10, 10, newX)
-    // values.current[0] = lerp(((values.current[0] / 90) * Math.PI) / 5, y, 0.2)
-    // values.current[1] = lerp(((values.current[1] / 90) * Math.PI) / 5, y, 0.2)
     values.current[0] = lerp(values.current[0], ((y / 90) * Math.PI) / 5, 0.2)
     values.current[1] = lerp(values.current[1], ((y / 90) * Math.PI) / 5, 0.2)
 
@@ -146,7 +119,7 @@ function Paddle({ x, y, z, SENSITIVITY }) {
         scale={[0.15, 0.15, 0.15]}
       >
         <Text rotation={[-Math.PI / 2, 0, 0]} position={[0, 1, 2]} size={1}>
-          {count.toString() || '0'}
+          {String(count)}
         </Text>
         <group rotation={[1.88, -0.35, 2.32]} scale={[2.97, 2.97, 2.97]}>
           <primitive object={nodes.Bone} />
@@ -167,7 +140,7 @@ function Paddle({ x, y, z, SENSITIVITY }) {
             castShadow
             receiveShadow
             material={materials.wood}
-            geometry={nodes.mesh_0.geometry}
+            // geometry={nodes.mesh_0.geometry}
           />
           <mesh
             castShadow

@@ -25,6 +25,9 @@ export const initSocket = () => {
   socketIo.on('SWITCH_ROOMS', (room) => {
     getState().setRoom(room)
   })
+  socketIo.on('NEW_GAME', () => {
+    getState().api.reset(true)
+  })
 
   socketIo.on('EULER_ANGLES', (eulerAngles) => {
     getState().setEulerAngles(eulerAngles)
