@@ -8,14 +8,13 @@ import { useTexture } from '@react-three/drei'
 import { useSocketData, initSocket, gameStore } from '@/helpers/store'
 import { useWindowSize } from 'react-use'
 
-const cursor_xAxisPosition = (z) => {
+const cursor_xAxisPosition = (z, SENSITIVITY) => {
   if (typeof window === 'undefined') return null
   // computed using z euler angle, 0 to 360
   let newZ = z
   // newZ = newZ > 180 ? 180 : newZ
-  // newZ = newZ > 300 ? 0 : newZ
+  // newZ = newZ > 300 ? 0 : newZ //this is overswing
   // newZ = newZ < 70 ? 70 : newZ
-  // newZ -= 70 // 40 > z > 0
 
   // left = 0 and right = 1
   // return newZ * Math.cos((30 / 180) * Math.PI)
@@ -26,15 +25,17 @@ const cursor_xAxisPosition = (z) => {
   // console.log(newZ / Math.PI)
   // console.log(-1 + (2 * newZ) / window.innerWidth)
   // return (window.innerWidth * (100 - Math.round((newZ / 40) * 100))) / 100
+
+  /**
+   * newZ is between -180 and 180
+   */
   newZ -= 180
   newZ = newZ > 0 ? newZ : -newZ
-  // newZ = newZ > 110 ? 110 : newZ
-  // newZ = newZ < 70 ? 70 : newZ
-  newZ = newZ / 18 // 40 > z > 0
+  newZ = (newZ / 18) * SENSITIVITY
   return newZ
   // return window.innerWidth / (100 - Math.round((newZ / 40) * 100))
 }
-const cursor_yAxisPosition = (x) => {
+const cursor_yAxisPosition = (x, SENSITIVITY) => {
   if (typeof window === 'undefined') return null
   // computed using x, -180 to 180
   let newX = x
@@ -51,7 +52,7 @@ const cursor_yAxisPosition = (x) => {
   newX = newX > 0 ? newX : -newX
   // newX = newX > 110 ? 110 : newX
   // newX = newX < 70 ? 70 : newX
-  newX = newX / 18 // 40 > z > 0
+  newX = (newX / 18) * SENSITIVITY
   return newX
 }
 
@@ -63,7 +64,7 @@ const userIsPointingAtScreen = (z, x) => {
   return false
 }
 
-function Paddle({ x, y, z }) {
+function Paddle({ x, y, z, SENSITIVITY }) {
   const ping = new Audio('/ping.mp3')
   const { nodes, materials } = useLoader(GLTFLoader, 'pingpong.glb')
 
@@ -87,8 +88,8 @@ function Paddle({ x, y, z }) {
     // x,
     // y,
     // z,
-    cursor_xAxisPosition: cursor_xAxisPosition(z),
-    cursor_yAxisPosition: cursor_yAxisPosition(x),
+    cursor_xAxisPosition: cursor_xAxisPosition(z, SENSITIVITY),
+    cursor_yAxisPosition: cursor_yAxisPosition(x, SENSITIVITY),
   })
 
   setPing(ping)
@@ -111,16 +112,20 @@ function Paddle({ x, y, z }) {
   useFrame((state) => {
     values.current[0] = lerp(
       values.current[0],
-      (cursor_xAxisPosition(z) * Math.PI) / 5,
+      (cursor_xAxisPosition(z, SENSITIVITY) * Math.PI) / 5,
       0.2
     )
     values.current[1] = lerp(
       values.current[1],
-      (cursor_xAxisPosition(z) * Math.PI) / 5,
+      (cursor_xAxisPosition(z, SENSITIVITY) * Math.PI) / 5,
       0.2
     )
 
-    api.position.set(cursor_xAxisPosition(z), cursor_yAxisPosition(x), 0)
+    api.position.set(
+      cursor_xAxisPosition(z, SENSITIVITY),
+      cursor_yAxisPosition(x, SENSITIVITY),
+      0
+    )
     api.rotation.set(0, 0, values.current[1])
 
     if (model.current && model.current.rotation) {
@@ -235,6 +240,8 @@ export default function Page() {
   const eulerAngles = useSocketData((s) => s.eulerAngles)
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
 
+  const [SENSITIVITY, setSensitivity] = useState(2)
+
   useEffect(() => {
     const setEulerValue = (e) => {
       setEulerAngles({
@@ -297,11 +304,10 @@ export default function Page() {
           <ContactGround />
           {!welcome && <Ball />}
           <Suspense fallback={null}>
-            <Paddle x={x} y={y} z={z} />
+            <Paddle x={x} y={y} z={z} SENSITIVITY={SENSITIVITY} />
           </Suspense>
         </Physics>
       </Canvas>
-
       <p
         style={{
           position: 'absolute',
@@ -319,11 +325,12 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: '-8px',
+          top: '50%',
           left: '50%',
-          transform: `translate3d(${
-            cursor_xAxisPosition(z) * 5
-          }%, ${cursor_yAxisPosition(x)}px, 0)`,
+          transform: `translate3d(${cursor_xAxisPosition(
+            z,
+            SENSITIVITY
+          )}%, ${cursor_yAxisPosition(x, SENSITIVITY)}%, 0)`,
           transition: 'transform 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
@@ -343,6 +350,13 @@ export default function Page() {
       >
         * click to start ...
       </div>
+      <input
+        type='number'
+        defaultValue={2}
+        onChange={(e) => {
+          setSensitivity(Number(e.value))
+        }}
+      />
     </>
   )
 }
