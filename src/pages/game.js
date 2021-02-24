@@ -115,8 +115,10 @@ function Paddle({ x, y, z, SENSITIVITY }) {
 
   useFrame((state) => {
     // rescale.clamped(90, 270, -10, 10, newX)
-    values.current[0] = lerp(values.current[0], y, 0.2)
-    values.current[1] = lerp(values.current[1], y, 0.2)
+    // values.current[0] = lerp(((values.current[0] / 90) * Math.PI) / 5, y, 0.2)
+    // values.current[1] = lerp(((values.current[1] / 90) * Math.PI) / 5, y, 0.2)
+    values.current[0] = lerp(values.current[0], ((y / 90) * Math.PI) / 5, 0.2)
+    values.current[1] = lerp(values.current[1], ((y / 90) * Math.PI) / 5, 0.2)
 
     api.position.set(
       cursor_xAxisPosition(z, SENSITIVITY),
@@ -358,10 +360,14 @@ export default function Page() {
       >
         Change sensitivity
         <input
+          style={{
+            color: 'black',
+            fontSize: '1.5rem',
+          }}
           type='number'
           defaultValue={2}
           onChange={(e) => {
-            setSensitivity(Number(e.value))
+            setSensitivity(Number(e.target.value))
           }}
         />
       </div>
