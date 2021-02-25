@@ -16,7 +16,7 @@ const Box = dynamic(() => import('@/components/canvas/Box'), {
 
 const Page = () => {
   useStore.setState({ title: 'Controller' })
-  const [acc, setAcc] = useState(null)
+  // const [acc, setAcc] = useState(null)
   const [eul, setEul] = useState(null)
 
   const currentRoom = useSocketData((s) => s.currentRoom)
@@ -37,13 +37,13 @@ const Page = () => {
     setEul(eulerAngles)
   }
 
-  function handleMotion(e) {
-    setAcc({
-      x: Math.round(e.acceleration.x),
-      y: Math.round(e.acceleration.y),
-      z: Math.round(e.acceleration.z),
-    })
-  }
+  // function handleMotion(e) {
+  //   setAcc({
+  //     x: Math.round(e.acceleration.x),
+  //     y: Math.round(e.acceleration.y),
+  //     z: Math.round(e.acceleration.z),
+  //   })
+  // }
 
   useEffect(() => {
     if (!clicked) return
@@ -56,7 +56,7 @@ const Page = () => {
         .then((permissionState) => {
           if (permissionState === 'granted') {
             window.addEventListener('deviceorientation', handleOrientation)
-            window.addEventListener('devicemotion', handleMotion, true)
+            // window.addEventListener('devicemotion', handleMotion, true)
           }
         })
         .catch(console.error)
@@ -64,12 +64,12 @@ const Page = () => {
       // handle regular non iOS 13+ devices
       console.log('not iOS')
       window.addEventListener('deviceorientation', handleOrientation)
-      window.addEventListener('devicemotion', handleMotion, true)
+      // window.addEventListener('devicemotion', handleMotion, true)
     }
 
     return () => {
       window.removeEventListener('deviceorientation', handleOrientation)
-      window.removeEventListener('devicemotion', handleMotion)
+      // window.removeEventListener('devicemotion', handleMotion)
     }
   }, [clicked])
 
@@ -78,7 +78,7 @@ const Page = () => {
     socket.emit('SEND_EULER_ANGLES', {
       room: currentRoom,
       euler_angles: eul,
-      acceleration: acc,
+      // acceleration: acc,
     })
     // // send rate of acceleration
     // socket.emit('SEND_ACCELERATION', {
@@ -87,20 +87,20 @@ const Page = () => {
     // })
   })
 
-  const { x, y, z } = useSocketData((s) => s.eulerAngles)
-  const { ax, ay, az } = useSocketData((s) => s.acceleration)
+  // const { x, y, z } = useSocketData((s) => s.eulerAngles)
+  // const { ax, ay, az } = useSocketData((s) => s.acceleration)
 
   // detect if the user is pointing at the main display
-  const userIsPointingAtScreen = () => {
-    if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
-      return true
-    }
-    return false
-  }
+  // const userIsPointingAtScreen = () => {
+  //   if (120 >= z && z >= 60 && 30 >= x && x >= -30) {
+  //     return true
+  //   }
+  //   return false
+  // }
 
-  const { color } = useSpring({
-    color: userIsPointingAtScreen() ? '#272727' : 'black',
-  })
+  // const { color } = useSpring({
+  //   color: userIsPointingAtScreen() ? '#272727' : 'black',
+  // })
 
   return (
     <>

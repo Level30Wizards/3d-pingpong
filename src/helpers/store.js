@@ -27,16 +27,17 @@ export const initSocket = () => {
     getState().setRoom(room)
   })
 
-  socketIo.on('NEW_GAME', () => {
+  socketIo.on('NEW_GAME', (data) => {
+    console.log('NEW_GAME', data)
     getGameState().welcome && getGameState().api.reset(false)
   })
 
   socketIo.on('EULER_ANGLES', (eulerAngles) => {
     getState().setEulerAngles(eulerAngles)
   })
-  socketIo.on('ACCELERATION', (acceleration) => {
-    getState().setAcceleration(acceleration)
-  })
+  // socketIo.on('ACCELERATION', (acceleration) => {
+  //   getState().setAcceleration(acceleration)
+  // })
   socketIo.on('disconnect', () => {
     getState().setRoom(null)
   })

@@ -58,7 +58,7 @@ nextApp.prepare().then(() => {
       // socket.broadcast.to(data.room).emit('ACCELERATION', data.acceleration)
     })
     socket.on('NEW_GAME', function (data) {
-      socket.broadcast.to(data.room).emit('NEW_GAME')
+      socket.broadcast.to(data.room).emit('NEW_GAME', data)
       // socket.broadcast.to(data.room).emit('ACCELERATION', data.acceleration)
     })
     // SEND_ACCELERATION is emitted by Controller

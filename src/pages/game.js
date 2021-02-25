@@ -195,10 +195,6 @@ function ContactGround() {
 }
 
 export default function Page() {
-  useEffect(() => {
-    initSocket()
-  }, [])
-
   const welcome = gameStore((state) => state.welcome)
   const { reset } = gameStore((state) => state.api)
 
@@ -206,12 +202,16 @@ export default function Page() {
   // const setEulerAngles = useSocketData((s) => s.setEulerAngles)
 
   const eulerAngles = useSocketData((s) => s.eulerAngles)
-  console.log(eulerAngles)
 
   const { x, y, z } = eulerAngles || { x: 1, y: 1, z: 1 }
 
   const [SENSITIVITY, setSensitivity] = useState(2)
 
+  useEffect(() => {
+    initSocket()
+  }, [])
+
+  // for local testing
   // useEffect(() => {
   //   const setEulerValue = (e) => {
   //     setEulerAngles({
@@ -295,13 +295,9 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: '50%',
-          left: '50%',
-          transform: `translate3d(${cursor_xAxisPosition(
-            z,
-            SENSITIVITY
-          )}vw, ${cursor_yAxisPosition(x, SENSITIVITY)}vh, 0)`,
-          transition: 'transform 16ms ease-out',
+          top: `${50 + cursor_xAxisPosition(z, SENSITIVITY) * 5}%`,
+          left: `${50 + cursor_yAxisPosition(x, SENSITIVITY) * 5}%`,
+          transition: 'top 16ms ease-out, left 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
           height: '16px',
@@ -320,7 +316,7 @@ export default function Page() {
       >
         * click to start ...
       </div>
-      <div
+      {/* <div
         style={{
           position: 'absolute',
           top: 50,
@@ -341,7 +337,7 @@ export default function Page() {
             setSensitivity(Number(e.target.value))
           }}
         />
-      </div>
+      </div> */}
     </>
   )
 }
