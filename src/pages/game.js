@@ -194,7 +194,7 @@ function ContactGround() {
   return <mesh ref={ref} />
 }
 
-export default function Page() {
+function Page() {
   const welcome = gameStore((state) => state.welcome)
   const { reset } = gameStore((state) => state.api)
 
@@ -341,3 +341,7 @@ export default function Page() {
     </>
   )
 }
+
+Page.whyDidYouRender = true
+
+export default Page

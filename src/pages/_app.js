@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import useStore from '@/helpers/store'
-import { useEffect, Children } from 'react'
+import React, { useEffect, Children } from 'react'
 import Header from '../config'
 import dynamic from 'next/dynamic'
 import Dom from '@/components/layout/_dom'
@@ -37,6 +37,23 @@ function MyApp({ Component, pageProps }) {
       compArr.push(child)
     }
   })
+
+  /**
+   * why-did-you-render README
+   * https://github.com/welldone-software/why-did-you-render
+   */
+  const whyDidYouRender = require('@welldone-software/why-did-you-render')
+  whyDidYouRender(React)
+
+  /**
+   * To debug a component:
+   *
+   * const Whatever = () => <Box />
+   *
+   * Whatever.whyDidYouRender = true
+   *
+   * export { Whatever }
+   */
 
   useEffect(() => {
     useStore.setState({ router })
