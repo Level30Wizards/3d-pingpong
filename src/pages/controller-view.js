@@ -129,8 +129,8 @@ const Page = () => {
               new_room: String(roomNumber.current.value),
             })
             setRoom(roomNumber.current.value)
+            !isActive && loopStart()
             setClicked(true)
-            loopStart()
           }
         }}
       >
@@ -143,7 +143,7 @@ const Page = () => {
       <button
         onClick={() => {
           socket.emit('NEW_GAME', {
-            room: currentRoom,
+            room: roomNumber.current.value,
           })
         }}
         style={{

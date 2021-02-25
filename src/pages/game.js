@@ -295,8 +295,8 @@ export default function Page() {
         style={{
           position: 'absolute',
           borderRadius: '50%',
-          top: `${50 + cursor_xAxisPosition(z, SENSITIVITY) * 5}%`,
-          left: `${50 + cursor_yAxisPosition(x, SENSITIVITY) * 5}%`,
+          left: `${50 + cursor_xAxisPosition(z, SENSITIVITY) * 5}%`,
+          top: `${50 + cursor_yAxisPosition(x, SENSITIVITY) * 5}%`,
           transition: 'top 16ms ease-out, left 16ms ease-out',
           backgroundColor: userIsPointingAtScreen(z, x) ? 'blue' : 'red',
           width: '16px',
