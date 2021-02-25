@@ -34,12 +34,12 @@ const Page = () => {
       y: Math.round(e.gamma),
       z: Math.round(e.alpha),
     }
-    setEul(eulerAngles)
     socket.emit('SEND_EULER_ANGLES', {
       room: currentRoom,
-      euler_angles: eul,
+      euler_angles: eulerAngles,
       // acceleration: acc,
     })
+    setEul(eulerAngles)
   }
 
   // function handleMotion(e) {
