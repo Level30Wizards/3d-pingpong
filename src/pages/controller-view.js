@@ -35,6 +35,11 @@ const Page = () => {
       z: Math.round(e.alpha),
     }
     setEul(eulerAngles)
+    socket.emit('SEND_EULER_ANGLES', {
+      room: currentRoom,
+      euler_angles: eul,
+      // acceleration: acc,
+    })
   }
 
   // function handleMotion(e) {
@@ -48,6 +53,7 @@ const Page = () => {
   useEffect(() => {
     if (!clicked) return
     window.removeEventListener('deviceorientation', handleOrientation)
+    console.log('adding events')
 
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
@@ -74,19 +80,26 @@ const Page = () => {
     }
   }, [clicked])
 
-  const [loopStop, loopStart, isActive] = useRafLoop((time) => {
-    // send euler angles
-    socket.emit('SEND_EULER_ANGLES', {
-      room: currentRoom,
-      euler_angles: eul,
-      // acceleration: acc,
-    })
-    // // send rate of acceleration
-    // socket.emit('SEND_ACCELERATION', {
-    //   room: currentRoom,
-    //   acceleration: acc,
-    // })
-  })
+  // const [loopStop, loopStart, isActive] = useRafLoop((time) => {
+  //   console.log('r3f')
+  //   // send euler angles
+  //   socket.emit('SEND_EULER_ANGLES', {
+  //     room: currentRoom,
+  //     euler_angles: eul,
+  //     // acceleration: acc,
+  //   })
+  //   // // send rate of acceleration
+  //   // socket.emit('SEND_ACCELERATION', {
+  //   //   room: currentRoom,
+  //   //   acceleration: acc,
+  //   // })
+  // }, false)
+
+  // useEffect(() => {
+  //   if (isActive) {
+  //     return () => loopStop()
+  //   }
+  // }, [isActive])
 
   // const { x, y, z } = useSocketData((s) => s.eulerAngles)
   // const { ax, ay, az } = useSocketData((s) => s.acceleration)
@@ -131,7 +144,7 @@ const Page = () => {
             })
             setRoom(roomNumber.current.value)
             setClicked(true)
-            !isActive && loopStart()
+            // !isActive() && loopStart()
           }
         }}
       >
