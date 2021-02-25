@@ -46,7 +46,8 @@ const Page = () => {
   // }
 
   useEffect(() => {
-    if (!clicked || isActive) return
+    if (!clicked) return
+    window.removeEventListener('deviceorientation', handleOrientation)
 
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
