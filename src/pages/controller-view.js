@@ -46,7 +46,7 @@ const Page = () => {
   // }
 
   useEffect(() => {
-    if (!clicked) return
+    if (!clicked || isActive) return
 
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
@@ -129,17 +129,17 @@ const Page = () => {
               new_room: String(roomNumber.current.value),
             })
             setRoom(roomNumber.current.value)
-            !isActive && loopStart()
             setClicked(true)
+            !isActive && loopStart()
           }
         }}
       >
         Connect to display
       </button>
-      {/* // <div>
-      //   <p>{JSON.stringify(acc)}</p>
-      //   <p>{JSON.stringify(eul)}</p>
-      // </div> */}
+      <div>
+        {/* <p>{JSON.stringify(acc)}</p> */}
+        <p>{JSON.stringify(eul)}</p>
+      </div>
       <button
         onClick={() => {
           socket.emit('NEW_GAME', {
